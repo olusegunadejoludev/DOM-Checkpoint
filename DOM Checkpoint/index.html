@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Cart</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  .item {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  .item:last-child {
+    border-bottom: none;
+  }
+  .item img {
+    width: 50px;
+    height: 50px;
+    vertical-align: middle;
+  }
+  .item-info {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .btn {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  .heart {
+    color: #ccc;
+  }
+  .liked {
+    color: red;
+  }
+</style>
+</head>
+<body>
+
+<div id="cart">
+  <!-- Example items in the cart -->
+  <div class="item" data-price="10">
+    <img src="item1.jpg" alt="Item 1">
+    <div class="item-info">
+      Item 1
+      <div>
+        Quantity: <button class="btn minus">-</button> <span class="quantity">1</span> <button class="btn plus">+</button>
+        <button class="btn remove">Remove</button>
+        <button class="btn heart">&hearts;</button>
+      </div>
+      <div>Price: $<span class="price">10</span></div>
+    </div>
+  </div>
+  
+  <div class="item" data-price="15">
+    <img src="item2.jpg" alt="Item 2">
+    <div class="item-info">
+      Item 2
+      <div>
+        Quantity: <button class="btn minus">-</button> <span class="quantity">1</span> <button class="btn plus">+</button>
+        <button class="btn remove">Remove</button>
+        <button class="btn heart">&hearts;</button>
+      </div>
+      <div>Price: $<span class="price">15</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="total">Total Price: $<span id="total-price">25</span></div>
+
+<script>
+  // Function to update total price
+  function updateTotal() {
+    var total = 0;
+    document.querySelectorAll('.item').forEach(function(item) {
+      var price = parseFloat(item.getAttribute('data-price'));
+      var quantity = parseInt(item.querySelector('.quantity').textContent);
+      total += price * quantity;
+    });
+    document.getElementById('total-price').textContent = total.toFixed(2);
+  }
+
+  // Event listener for plus button
+  document.querySelectorAll('.plus').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var quantityElement = this.parentNode.querySelector('.quantity');
+      var quantity = parseInt(quantityElement.textContent);
+      quantityElement.textContent = quantity + 1;
+      updateTotal();
+    });
+  });
+
+  // Event listener for minus button
+  document.querySelectorAll('.minus').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var quantityElement = this.parentNode.querySelector('.quantity');
+      var quantity = parseInt(quantityElement.textContent);
+      if (quantity > 1) {
+        quantityElement.textContent = quantity - 1;
+        updateTotal();
+      }
+    });
+  });
+
+  // Event listener for remove button
+  document.querySelectorAll('.remove').forEach(function(button) {
+    button.addEventListener('click', function() {
+      this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+      updateTotal();
+    });
+  });
+
+  // Event listener for like button
+  document.querySelectorAll('.heart').forEach(function(button) {
+    button.addEventListener('click', function() {
+      this.classList.toggle('liked');
+    });
+  });
+</script>
+
+</body>
+</html>
